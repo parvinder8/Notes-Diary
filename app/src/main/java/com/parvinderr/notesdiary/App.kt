@@ -1,4 +1,7 @@
 package com.parvinderr.notesdiary
 
+import android.app.Application
+import dagger.hilt.android.AndroidEntryPoint
 
-class App {}
+@AndroidEntryPoint
+class App : Application()
