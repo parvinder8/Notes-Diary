@@ -13,4 +13,34 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+
+    <style name="NotesDiary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/light_blue</item>
+        <item name="colorOnPrimary">@color/dark_blue</item>
+        <item name="colorPrimaryContainer">@color/dark_blue</item>
+
+        <item name="colorSecondary">@color/light_grey</item>
+        <item name="colorOnSecondary">@color/black_secondary</item>
+        <item name="colorSecondaryContainer">#FF3b4858</item>
+
+        <item name="colorError">@color/light_peach</item>
+        <item name="colorOnError">@color/brown</item>
+        <item name="colorErrorContainer">@color/brown</item>
+    </style>
+
+
+    <!-- EditView Search -->
+    <style name="SearchEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/et_round_white_border</item>
+        <item name="android:padding">@dimen/dimen6</item>
+        <item name="android:layout_marginStart">@dimen/dimen8</item>
+        <item name="android:layout_marginEnd">@dimen/dimen8</item>
+        <item name="android:drawableStart">@drawable/ic_search_black</item>
+        <item name="android:paddingEnd">@dimen/dimen12</item>
+        <item name="android:paddingStart">@dimen/dimen8</item>
+        <item name="android:drawableEnd">@drawable/ic_filter_black</item>
+        <item name="android:textColor">@color/light_black</item>
+        <item name="android:maxLines">1</item>
+    </style>
 </resources>

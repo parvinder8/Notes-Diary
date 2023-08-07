@@ -7,11 +7,28 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.parvinderr.notesdiary.ui.MainActivity
 
 
 fun Context.showToast(text: String, type: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, text, type).show()
+}
+
+
+fun Context.closeApp() {
+    (this as? MainActivity)?.finish()
+}
+
+
+fun Context.backPressed() {
+    (this as? MainActivity)?.onBackPressedDispatcher?.onBackPressed()
+}
+
+
+fun Fragment.showToast(text: String, type: Int = Toast.LENGTH_SHORT) {
+    requireContext().showToast(text, type)
 }
 
 fun View.showSnackBar(text: String, type: Int = Toast.LENGTH_SHORT) {
@@ -63,5 +80,4 @@ fun View.showWithFade(duration: Long = 300) {
     this.alpha = 0f
     this.visibility = View.VISIBLE
     this.animate().alpha(1f).setDuration(duration).setListener(null)
-
 }

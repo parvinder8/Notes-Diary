@@ -15,4 +15,8 @@ class SettingFragment : ViewBindingFragment<FragmentSettingBinding>() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun init() {
+        TODO("Not yet implemented")
+    }
+
 }

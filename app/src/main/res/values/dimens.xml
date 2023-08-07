@@ -9,4 +9,8 @@
     <dimen name="dimen30">30dp</dimen>
     <dimen name="dimen40">40dp</dimen>
     <dimen name="dimen80">80dp</dimen>
+    <dimen name="dimen0">0dp</dimen>
+    <dimen name="dimen1">1dp</dimen>
+    <dimen name="dimen20">20dp</dimen>
+    <dimen name="dimen16">16dp</dimen>
 </resources>

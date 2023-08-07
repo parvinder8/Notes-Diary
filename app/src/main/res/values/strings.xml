@@ -2,4 +2,19 @@
     <string name="app_name">Notes Diary</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">Title</string>
+    <string name="setting_button">Setting Button</string>
+    <string name="filter_button">Filter Button</string>
+
+    <string name="save_and_exit">Save &amp; Exit</string>
+    <string name="exit">Exit</string>
+    <string name="note_saved_successfully">Note Saved Successfully!</string>
+    <string name="note_updated_successfully">Note Updated Successfully!</string>
+    <string name="updating_note_failed">Updating Note Failed</string>
+    <string name="saving_note_failed">Saving Note Failed</string>
+    <string name="note_contents_empty">Note Contents Are Empty</string>
+    <string name="something_went_wrong">Something Went Wrong</string>
+    <string name="home">Home</string>
+    <string name="setting">Setting</string>
+    <string name="add_note">Add Note</string>
 </resources>
