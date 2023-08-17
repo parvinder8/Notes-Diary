@@ -3,6 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
+    <string name="title_and_content_empty">Title and content is empty</string>
     <string name="setting_button">Setting Button</string>
     <string name="filter_button">Filter Button</string>
 
@@ -16,5 +17,17 @@
     <string name="something_went_wrong">Something Went Wrong</string>
     <string name="home">Home</string>
     <string name="setting">Setting</string>
+    <string name="settings">Settings</string>
     <string name="add_note">Add Note</string>
+    <string name="app_settings">App Settings</string>
+    <string name="app_theme">App Theme</string>
+    <string name="layout_type">Layout Manager</string>
+    <string name="product">Product</string>
+    <string name="visit_github">Visit Github</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="edit">Edit</string>
+    <string name="pin">Pin</string>
+    <string name="delete">Delete</string>
+    <string name="note_deleted_successfully">Note Deleted Successfully</string>
+    <string name="deleting_note_failed">Deleting Note Failed</string>
 </resources>

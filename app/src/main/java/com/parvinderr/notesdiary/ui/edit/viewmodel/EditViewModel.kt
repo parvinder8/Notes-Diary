@@ -10,6 +10,8 @@ import com.parvinderr.notesdiary.utils.Constants.DateConstants.Companion.HOUR_MI
 import com.parvinderr.notesdiary.utils.Constants.DateConstants.Companion.YEAR_MONTH_FORMATTER
 import com.parvinderr.notesdiary.utils.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,6 +44,8 @@ class EditViewModel @Inject constructor(
 
     private val updatedNote: Note? = null
 
+    val backgroundThread = CoroutineScope(Dispatchers.IO)
+
     fun setNoteTitle(title: String) {
         val tempTitle = noteTitle.value
         if (tempTitle.trim() == title.trim()) return
@@ -69,12 +73,18 @@ class EditViewModel @Inject constructor(
     fun saveNote() {
         val isUpdateNote = isUpdateNote.value
         if (isUpdateNote && updatedNote == null) return
-        viewModelScope.launch { saveNoteImpl(isUpdateNote).collectLatest { _noteResponse.emit(it) } }
+        backgroundThread.launch() {
+            saveNoteImpl(isUpdateNote).collectLatest {
+                _noteResponse.emit(
+                    it
+                )
+            }
+        }
     }
 
 
     private fun saveNoteImpl(isUpdateNote: Boolean = false): Flow<String> {
-        val tempUpdatedNoteItem = updatedNote!!
+        val tempUpdatedNoteItem = updatedNote
         val noteTitle = _noteTitle.value
         val noteContent = _noteContent.value
         val currentDate = Date().getCurrentDate(YEAR_MONTH_FORMATTER)
@@ -83,13 +93,14 @@ class EditViewModel @Inject constructor(
         val tempNote = Note(
             noteTitle = noteTitle,
             noteContent = noteContent,
-            addedDate = if (isUpdateNote) tempUpdatedNoteItem.addedDate else currentDate,
-            addedTime = if (isUpdateNote) tempUpdatedNoteItem.addedTime else currentTime,
+            addedDate = if (isUpdateNote) tempUpdatedNoteItem?.addedDate ?: "" else currentDate,
+            addedTime = if (isUpdateNote) tempUpdatedNoteItem?.addedTime ?: "" else currentTime,
             updatedDate = currentDate,
             updatedTime = currentTime,
-            isPinned = if (isUpdateNote) tempUpdatedNoteItem.isPinned else false,
-            isLocked = if (isUpdateNote) tempUpdatedNoteItem.isLocked else false,
-            backgroundColor = if (isUpdateNote) tempUpdatedNoteItem.backgroundColor else "FFF"
+            isPinned = if (isUpdateNote) tempUpdatedNoteItem?.isPinned ?: false else false,
+            isLocked = if (isUpdateNote) tempUpdatedNoteItem?.isLocked ?: false else false,
+            backgroundColor = if (isUpdateNote) tempUpdatedNoteItem?.backgroundColor
+                ?: "" else "FFF"
         )
 
         return if (isUpdateNote) {
@@ -107,6 +118,7 @@ class EditViewModel @Inject constructor(
             } catch (e: Exception) {
                 emit(e.message ?: context.getString(R.string.saving_note_failed))
             }
+
         }
     }
 

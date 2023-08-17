@@ -2,21 +2,57 @@ package com.parvinderr.notesdiary.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavHostController
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.parvinderr.notesdiary.R
 import com.parvinderr.notesdiary.databinding.ActivityMainBinding
+import com.parvinderr.notesdiary.preference.SettingPreferenceHelper
+import com.parvinderr.notesdiary.utils.ThemeEnum
+import com.parvinderr.notesdiary.utils.gone
+import com.parvinderr.notesdiary.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var _binding: ActivityMainBinding
-    private val binding get() = _binding
+    val binding get() = _binding
     override fun onCreate(savedInstanceState: Bundle?) {
+        setAppTheme(SettingPreferenceHelper.preference.getThemePreference())
+
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
     }
 
-    fun navigateToDestination(destination: Int) {
-        NavHostController(this).navigate(destination)
+    override fun onStart() {
+        super.onStart()
+        setUpViews()
+    }
+
+    private fun setUpViews() {
+        val navController = findNavController(R.id.nav_host_fragment)
+        binding.bottomNavigationView.setupWithNavController(navController)
+        listener()
+    }
+
+    private fun listener() {
+        val navHostFragment = findNavController(R.id.nav_host_fragment)
+        navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.editNoteFragment || destination.id == R.id.splashFragment) binding.bottomNavigationView.gone()
+            else binding.bottomNavigationView.visible()
+
+        }
+    }
+
+    fun setAppTheme(selectedTheme: ThemeEnum) {
+        AppCompatDelegate.setDefaultNightMode(
+            when (selectedTheme) {
+                ThemeEnum.DEFAULT -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                ThemeEnum.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+                ThemeEnum.DARK -> AppCompatDelegate.MODE_NIGHT_YES
+            }
+        )
     }
 }

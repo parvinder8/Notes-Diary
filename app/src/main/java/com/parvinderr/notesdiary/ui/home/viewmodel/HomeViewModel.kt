@@ -1,5 +1,6 @@
 package com.parvinderr.notesdiary.ui.home.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.parvinderr.notesdiary.data.model.Note
@@ -41,7 +42,9 @@ class HomeViewModel @Inject constructor(
 
 
     private fun getAll(): Flow<List<Note>> = flow {
-        emit(notesRepository.getAllNotes())
+        val tempAllNotes = notesRepository.getAllNotes()
+        Log.d("in_get_all", tempAllNotes.toString())
+        emit(tempAllNotes)
     }.stateIn(
         scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = ArrayList()
     )
@@ -49,12 +52,17 @@ class HomeViewModel @Inject constructor(
     private fun filterNotes(
         searchQuery: String, filterType: NotesFilterBy, sortBy: NotesSortBy
     ): Flow<List<Note>> {
+
         return flow {
-            emit(notesRepository.filterNotes(searchQuery, filterType, sortBy))
+            val tempAllNotes = notesRepository.filterNotes(searchQuery, filterType, sortBy)
+            Log.d("in_filter", tempAllNotes.toString())
+
+            emit(tempAllNotes)
         }.stateIn(
             scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = ArrayList()
         )
     }
+
 
     fun getNotesData(
         getAllData: Boolean = true,
@@ -73,8 +81,13 @@ class HomeViewModel @Inject constructor(
 
 
     fun setSearchQuery(q: String) {
-        _searchQuery.value = q
+        viewModelScope.launch { _searchQuery.emit(q) }
     }
 
+
+    fun deleteNote(note: Note): Flow<String> {
+        return flow { emit(notesRepository.deleteNote(note)) }
+
+    }
 
 }

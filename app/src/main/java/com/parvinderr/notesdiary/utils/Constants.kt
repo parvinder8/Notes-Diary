@@ -2,16 +2,23 @@ package com.parvinderr.notesdiary.utils
 
 class Constants {
 
-    class DateConstants {
+    interface DateConstants {
         companion object {
             const val YEAR_MONTH_FORMATTER = "yyyy/MM/dd"
             const val HOUR_MIN_SEC_FORMATTER = "hh:mm:ss"
         }
     }
 
-    class SearchConstant {
+    interface PreferenceConstants{
         companion object {
-            const val SEARCH_DEBOUNCING_TIME = 300L
+            const val APP_THEME = "app_theme"
+            const val APP_LAYOUT = "app_layout"
+        }
+    }
+
+    interface SearchConstants {
+        companion object {
+            const val SEARCH_DEBOUNCING_TIME = 600L
         }
     }
 

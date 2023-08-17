@@ -4,10 +4,13 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.parvinderr.notesdiary.ui.MainActivity
 
@@ -80,4 +83,10 @@ fun View.showWithFade(duration: Long = 300) {
     this.alpha = 0f
     this.visibility = View.VISIBLE
     this.animate().alpha(1f).setDuration(duration).setListener(null)
+}
+
+fun RecyclerView.scrollToPositionBackgroundThread(position: Int, timeInMillis: Long = 200) {
+    Handler(Looper.getMainLooper()).postDelayed(kotlinx.coroutines.Runnable {
+        this.scrollToPosition(position)
+    }, timeInMillis)
 }

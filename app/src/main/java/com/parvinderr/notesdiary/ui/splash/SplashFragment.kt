@@ -16,7 +16,7 @@ class SplashFragment : ViewBindingFragment<FragmentSplashBinding>() {
 
     override fun init() {
         Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(R.id.action_splashFragment_to_noteDashboardFragment2)
+            findNavController().navigate(R.id.action_splashFragment_to_homeFragment2)
         }, 2000)
     }
 }
