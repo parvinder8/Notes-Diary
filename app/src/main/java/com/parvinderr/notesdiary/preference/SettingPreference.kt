@@ -3,6 +3,8 @@ package com.parvinderr.notesdiary.preference
 import android.content.Context
 import com.parvinderr.notesdiary.utils.Constants.PreferenceConstants.Companion.APP_LAYOUT
 import com.parvinderr.notesdiary.utils.Constants.PreferenceConstants.Companion.APP_THEME
+import com.parvinderr.notesdiary.utils.Constants.PreferenceConstants.Companion.FONT_FAMILY
+import com.parvinderr.notesdiary.utils.FontFamilyEnum
 import com.parvinderr.notesdiary.utils.LayoutEnum
 import com.parvinderr.notesdiary.utils.ThemeEnum
 import dagger.Module
@@ -41,5 +43,15 @@ class SettingPreference @Inject constructor(@ApplicationContext private val cont
         )
     }
 
+    fun setFontFamilyPreference(fontFamily: FontFamilyEnum) {
+        sp.edit().putString(FONT_FAMILY, fontFamily.name).apply()
+    }
+
+    fun getFontFamilyPreference(): FontFamilyEnum {
+        if (!sp.contains(FONT_FAMILY)) return FontFamilyEnum.SANS
+        return FontFamilyEnum.valueOf(
+            sp.getString(FONT_FAMILY, FontFamilyEnum.SANS.name) ?: FontFamilyEnum.SANS.name
+        )
+    }
 
 }

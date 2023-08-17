@@ -23,4 +23,6 @@
     <dimen name="end_margin">12dp</dimen>
 
     <dimen name="item_padding">6dp</dimen>
+    <dimen name="dimen24">24dp</dimen>
+    <dimen name="dimen50">50dp</dimen>
 </resources>

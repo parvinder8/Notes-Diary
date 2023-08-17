@@ -8,6 +8,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.parvinderr.notesdiary.R
 import com.parvinderr.notesdiary.databinding.ActivityMainBinding
 import com.parvinderr.notesdiary.preference.SettingPreferenceHelper
+import com.parvinderr.notesdiary.utils.FontFamilyEnum
 import com.parvinderr.notesdiary.utils.ThemeEnum
 import com.parvinderr.notesdiary.utils.gone
 import com.parvinderr.notesdiary.utils.visible
@@ -19,11 +20,22 @@ class MainActivity : AppCompatActivity() {
     val binding get() = _binding
     override fun onCreate(savedInstanceState: Bundle?) {
         setAppTheme(SettingPreferenceHelper.preference.getThemePreference())
-
+        changeFontFamily(SettingPreferenceHelper.preference.getFontFamilyPreference())
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+    }
+
+    fun changeFontFamily(family: FontFamilyEnum) {
+        theme.applyStyle(
+            when (family) {
+                FontFamilyEnum.DONGLE -> R.style.Dongle
+                FontFamilyEnum.POPPINS -> R.style.Poppins
+                FontFamilyEnum.SANS -> R.style.SansSerif
+                FontFamilyEnum.ROBOTO -> R.style.Roboto
+            }, false
+        )
     }
 
     override fun onStart() {

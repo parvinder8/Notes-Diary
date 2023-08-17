@@ -24,7 +24,6 @@
         <item name="android:drawableStart">@drawable/ic_search_white</item>
         <item name="android:paddingEnd">@dimen/dimen12</item>
         <item name="android:paddingStart">@dimen/dimen8</item>
-        <item name="android:drawableEnd">@drawable/ic_filter_white</item>
         <item name="android:textColor">@color/off_white</item>
         <item name="android:maxLines">1</item>
     </style>

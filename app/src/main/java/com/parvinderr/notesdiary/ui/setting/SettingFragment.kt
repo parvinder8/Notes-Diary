@@ -10,6 +10,7 @@ import com.parvinderr.notesdiary.common.ViewBindingFragment
 import com.parvinderr.notesdiary.databinding.FragmentSettingBinding
 import com.parvinderr.notesdiary.preference.SettingPreferenceHelper
 import com.parvinderr.notesdiary.ui.MainActivity
+import com.parvinderr.notesdiary.utils.FontFamilyEnum
 import com.parvinderr.notesdiary.utils.LayoutEnum
 import com.parvinderr.notesdiary.utils.ThemeEnum
 import com.parvinderr.notesdiary.utils.showToast
@@ -55,6 +56,18 @@ class SettingFragment : ViewBindingFragment<FragmentSettingBinding>() {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
+
+            spinnerFontFamily.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
+                    val tempSelectedData = parent?.selectedItem as FontFamilyEnum? ?: return
+                    (activity as MainActivity).changeFontFamily(tempSelectedData)
+                    SettingPreferenceHelper.preference.setFontFamilyPreference(tempSelectedData)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
         }
     }
 
@@ -77,6 +90,15 @@ class SettingFragment : ViewBindingFragment<FragmentSettingBinding>() {
         )
         binding.spinnerLayoutType.adapter = layoutAdapter
         binding.spinnerLayoutType.setSelection(layoutData.indexOf(selectedLayout))
+
+        val fontFamilyData = FontFamilyEnum.values()
+        val selectedFontFamily = SettingPreferenceHelper.preference.getFontFamilyPreference()
+
+        val fontFamilyAdapter = ArrayAdapter(
+            requireContext(), android.R.layout.simple_spinner_dropdown_item, fontFamilyData
+        )
+        binding.spinnerFontFamily.adapter = fontFamilyAdapter
+        binding.spinnerFontFamily.setSelection(fontFamilyData.indexOf(selectedFontFamily))
 
     }
 

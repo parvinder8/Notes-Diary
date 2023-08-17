@@ -30,4 +30,6 @@
     <string name="delete">Delete</string>
     <string name="note_deleted_successfully">Note Deleted Successfully</string>
     <string name="deleting_note_failed">Deleting Note Failed</string>
+    <string name="font_family">Font Family</string>
+    <string name="filter">Filter</string>
 </resources>

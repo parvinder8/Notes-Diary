@@ -42,9 +42,10 @@ class EditViewModel @Inject constructor(
     private val _isUpdateNote = MutableStateFlow(false)
     val isUpdateNote get() = _isUpdateNote as StateFlow<Boolean>
 
-    private val updatedNote: Note? = null
+    private val _noteItemIfUpdate = MutableStateFlow<Note?>(null)
+    val noteItemIfUpdate get() = _noteItemIfUpdate as StateFlow<Note?>
 
-    val backgroundThread = CoroutineScope(Dispatchers.IO)
+    private val backgroundThread = CoroutineScope(Dispatchers.IO)
 
     fun setNoteTitle(title: String) {
         val tempTitle = noteTitle.value
@@ -66,13 +67,23 @@ class EditViewModel @Inject constructor(
         viewModelScope.launch { _isUpdateNote.emit(b) }
     }
 
-    fun getNoteById(id: Long): Flow<Note> {
+    fun getNoteById(id: Long) {
+        if (id <= 0) return
+        viewModelScope.launch {
+            getNoteByIdImpl(id).collectLatest {
+                _noteItemIfUpdate.emit(it)
+            }
+        }
+    }
+
+    private fun getNoteByIdImpl(id: Long): Flow<Note> {
         return flow { emit(notesRepository.getNoteById(id)) }
     }
 
     fun saveNote() {
         val isUpdateNote = isUpdateNote.value
-        if (isUpdateNote && updatedNote == null) return
+        val updateNoteItem = noteItemIfUpdate.value
+        if (isUpdateNote && updateNoteItem == null) return
         backgroundThread.launch() {
             saveNoteImpl(isUpdateNote).collectLatest {
                 _noteResponse.emit(
@@ -84,13 +95,15 @@ class EditViewModel @Inject constructor(
 
 
     private fun saveNoteImpl(isUpdateNote: Boolean = false): Flow<String> {
-        val tempUpdatedNoteItem = updatedNote
+        val tempUpdatedNoteItem = noteItemIfUpdate.value
         val noteTitle = _noteTitle.value
+        val tempCurrentNoteId = currentNoteId.value
         val noteContent = _noteContent.value
         val currentDate = Date().getCurrentDate(YEAR_MONTH_FORMATTER)
         val currentTime = Date().getCurrentDate(HOUR_MIN_SEC_FORMATTER)
 
         val tempNote = Note(
+            id = if (isUpdateNote) tempUpdatedNoteItem?.id ?: 0L else 0L,
             noteTitle = noteTitle,
             noteContent = noteContent,
             addedDate = if (isUpdateNote) tempUpdatedNoteItem?.addedDate ?: "" else currentDate,

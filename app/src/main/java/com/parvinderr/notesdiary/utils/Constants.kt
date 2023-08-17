@@ -9,10 +9,11 @@ class Constants {
         }
     }
 
-    interface PreferenceConstants{
+    interface PreferenceConstants {
         companion object {
             const val APP_THEME = "app_theme"
             const val APP_LAYOUT = "app_layout"
+            const val FONT_FAMILY = "font_family"
         }
     }
 

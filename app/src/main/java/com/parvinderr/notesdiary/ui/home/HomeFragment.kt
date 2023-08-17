@@ -15,8 +15,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.parvinderr.notesdiary.R
 import com.parvinderr.notesdiary.common.ViewBindingFragment
 import com.parvinderr.notesdiary.data.model.Note
+import com.parvinderr.notesdiary.databinding.BottomSheetLayoutBinding
 import com.parvinderr.notesdiary.databinding.FragmentHomeBinding
 import com.parvinderr.notesdiary.preference.SettingPreferenceHelper
+import com.parvinderr.notesdiary.ui.home.adapter.FilterAdapter
 import com.parvinderr.notesdiary.ui.home.adapter.NotesAdapter
 import com.parvinderr.notesdiary.ui.home.viewmodel.HomeViewModel
 import com.parvinderr.notesdiary.utils.Constants
@@ -37,12 +39,20 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         if (isLongPressed) {
             showPopUpMenu(item, itemView)
         } else {
-            /**
-             * move to edit note screen
-             */
-            showToast("Clicked")
-
+            navigateToEditNote(item.id)
         }
+    }
+
+    private val filterAdapter = FilterAdapter { filterBy, sortBy ->
+
+    }
+
+    private fun navigateToEditNote(id: Long) {
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(
+                id, true
+            )
+        )
     }
 
     private fun showPopUpMenu(item: Note, itemView: View) {
@@ -50,7 +60,11 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         menu.inflate(R.menu.note_item_menu)
         menu.setOnMenuItemClickListener {
             when (it.title.toString().lowercase().trim()) {
-                "edit" -> true
+                "edit" -> {
+                    navigateToEditNote(item.id)
+                    true
+                }
+
                 "delete" -> {
                     lifecycleScope.launch {
                         homeViewModel.deleteNote(item).collectLatest { response ->
@@ -109,8 +123,11 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         with(binding) {
             fbAdd.setOnClickListener {
                 val navDirection =
-                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment("", true)
+                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(-1L, false)
                 findNavController().navigate(navDirection)
+            }
+            tvFilter.setOnClickListener {
+                showFilterBottomSheet()
             }
         }
     }
@@ -153,7 +170,8 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
     }
 
     private fun showFilterBottomSheet() {
-// TODO: Create bottom sheet
+        val bottomSheetBinding = BottomSheetLayoutBinding.inflate(layoutInflater)
+        bottomSheetBinding.recyclerView.adapter = filterAdapter
         bottomSheet.show()
     }
 

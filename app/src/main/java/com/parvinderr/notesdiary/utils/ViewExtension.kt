@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -90,3 +91,5 @@ fun RecyclerView.scrollToPositionBackgroundThread(position: Int, timeInMillis: L
         this.scrollToPosition(position)
     }, timeInMillis)
 }
+
+val String.toEditable: Editable get() = Editable.Factory.getInstance().newEditable(this)

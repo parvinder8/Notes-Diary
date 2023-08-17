@@ -48,27 +48,29 @@ class NotesAdapter(private val onClick: (Note, Boolean, View) -> Unit) :
         }
     }
 
-}
 
-class NotesDiffUtilCallback(private val notes: MutableList<Note>, private val mData: List<Note>) :
-    DiffUtil.Callback() {
-    override fun getOldListSize(): Int {
-        return notes.size
-    }
+    class NotesDiffUtilCallback(
+        private val notes: MutableList<Note>,
+        private val mData: List<Note>
+    ) :
+        DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return notes.size
+        }
 
-    override fun getNewListSize(): Int {
-        return mData.size
-    }
+        override fun getNewListSize(): Int {
+            return mData.size
+        }
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return notes[oldItemPosition] == mData[newItemPosition]
-    }
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return notes[oldItemPosition] == mData[newItemPosition]
+        }
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return when {
-            notes[oldItemPosition].id == mData[newItemPosition].id && notes[oldItemPosition].noteContent == mData[newItemPosition].noteContent && notes[oldItemPosition].noteTitle == mData[newItemPosition].noteTitle -> true
-            else -> false
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return when {
+                notes[oldItemPosition].id == mData[newItemPosition].id && notes[oldItemPosition].noteContent == mData[newItemPosition].noteContent && notes[oldItemPosition].noteTitle == mData[newItemPosition].noteTitle -> true
+                else -> false
+            }
         }
     }
-
 }

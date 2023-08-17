@@ -87,6 +87,9 @@ dependencies {
     // datastore for preference
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
+    // timber for logging
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
     // Kotlin Coroutines
     def coroutines_version = "1.6.4"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutines_version}"
