@@ -1,6 +1,7 @@
 package com.parvinderr.notesdiary.repository
 
 import android.content.Context
+import android.util.Log
 import com.parvinderr.notesdiary.R
 import com.parvinderr.notesdiary.data.dao.NoteDao
 import com.parvinderr.notesdiary.data.model.Note
@@ -38,11 +39,15 @@ class NoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveNote(note: Note): String {
+        Log.d("repo_operations", note.toString())
         try {
+            Log.d("repo_operations", "in try")
+
             notesDao.insert(note)
             return context.getString(R.string.note_saved_successfully)
         } catch (e: Exception) {
-            throw Exception(context.getString(R.string.saving_note_failed))
+            e.printStackTrace()
+            throw Exception(e.message ?: context.getString(R.string.saving_note_failed))
         }
     }
 
@@ -62,6 +67,15 @@ class NoteRepositoryImpl @Inject constructor(
             throw Exception(e.message ?: context.getString(R.string.something_went_wrong))
         }
 
+    }
+
+    override suspend fun deleteNote(note: Note): String {
+        try {
+            notesDao.delete(note)
+            return context.getString(R.string.note_deleted_successfully)
+        } catch (e: Exception) {
+            throw Exception(e.message ?: context.getString(R.string.deleting_note_failed))
+        }
     }
 
 }

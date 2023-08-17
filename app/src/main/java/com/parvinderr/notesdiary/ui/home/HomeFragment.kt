@@ -2,17 +2,28 @@ package com.parvinderr.notesdiary.ui.home
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.parvinderr.notesdiary.R
 import com.parvinderr.notesdiary.common.ViewBindingFragment
+import com.parvinderr.notesdiary.data.model.Note
 import com.parvinderr.notesdiary.databinding.FragmentHomeBinding
+import com.parvinderr.notesdiary.preference.SettingPreferenceHelper
 import com.parvinderr.notesdiary.ui.home.adapter.NotesAdapter
 import com.parvinderr.notesdiary.ui.home.viewmodel.HomeViewModel
-import com.parvinderr.notesdiary.utils.Constants.SearchConstant.Companion.SEARCH_DEBOUNCING_TIME
+import com.parvinderr.notesdiary.utils.Constants
+import com.parvinderr.notesdiary.utils.LayoutEnum
+import com.parvinderr.notesdiary.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -22,23 +33,42 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
 
     private val homeViewModel by viewModels<HomeViewModel>()
 
-    private val notesAdapter = NotesAdapter { item, isLongPressed ->
-
+    private val notesAdapter = NotesAdapter { item, isLongPressed, itemView ->
         if (isLongPressed) {
-            /**
-             * show menu on long press
-             */
+            showPopUpMenu(item, itemView)
         } else {
             /**
              * move to edit note screen
              */
+            showToast("Clicked")
+
         }
     }
 
-    private val job = lifecycleScope.launch {
-        delay(SEARCH_DEBOUNCING_TIME)
-        homeViewModel.getNotesData(false)
+    private fun showPopUpMenu(item: Note, itemView: View) {
+        val menu = PopupMenu(requireContext(), itemView)
+        menu.inflate(R.menu.note_item_menu)
+        menu.setOnMenuItemClickListener {
+            when (it.title.toString().lowercase().trim()) {
+                "edit" -> true
+                "delete" -> {
+                    lifecycleScope.launch {
+                        homeViewModel.deleteNote(item).collectLatest { response ->
+                            if (response.isEmpty()) return@collectLatest
+                            showToast(response)
+                            getNotesData()
+                        }
+                    }
+                    true
+                }
+
+                else -> false
+            }
+        }
+        menu.show()
     }
+
+    private var job: Job? = null
 
     private val bottomSheet by lazy {
         BottomSheetDialog(requireContext())
@@ -46,10 +76,23 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
 
 
     override fun init() {
-        Log.d("fragment_data", "init called")
         clickListeners()
         observers()
         listeners()
+    }
+
+    override fun onResume() {
+        setLayoutManager()
+        super.onResume()
+    }
+
+    private fun setLayoutManager() {
+        val layoutManager = SettingPreferenceHelper.preference.getLayoutPreference()
+        val tempLayoutManager = if (layoutManager == LayoutEnum.GRID) GridLayoutManager(
+            requireContext(), 2, GridLayoutManager.VERTICAL, false
+        ) else LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvNotes.layoutManager = tempLayoutManager
+        binding.rvNotes.scrollToPosition(tempLayoutManager.findFirstCompletelyVisibleItemPosition())
     }
 
     private fun listeners() {
@@ -64,27 +107,54 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
 
     private fun clickListeners() {
         with(binding) {
-
+            fbAdd.setOnClickListener {
+                val navDirection =
+                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment("", true)
+                findNavController().navigate(navDirection)
+            }
         }
     }
 
     private fun observers() {
         lifecycleScope.launch {
             homeViewModel.allNotes.collectLatest {
+                binding.rvNotes.adapter = notesAdapter
                 notesAdapter.setData(it)
-            }
-
-            homeViewModel.searchQuery.collectLatest {
 
             }
-
         }
+
+        lifecycleScope.launch {
+            homeViewModel.searchQuery.collectLatest {
+                Log.d("search_query", it)
+                job?.cancel()
+                job = lifecycleScope.launch {
+                    delay(Constants.SearchConstants.SEARCH_DEBOUNCING_TIME)
+                    getNotesData(it)
+                }
+            }
+        }
+
+
     }
 
     override fun onBind(
         inflater: LayoutInflater, container: ViewGroup?
     ): FragmentHomeBinding {
         return FragmentHomeBinding.inflate(layoutInflater, container, false)
+    }
+
+
+    private fun getNotesData(q: String = "") {
+        val query = q.ifEmpty { homeViewModel.searchQuery.value }
+        val filterType = homeViewModel.filterType.value
+        val sortType = homeViewModel.sortType.value
+        homeViewModel.getNotesData(false, query, filterType, sortType)
+    }
+
+    private fun showFilterBottomSheet() {
+// TODO: Create bottom sheet
+        bottomSheet.show()
     }
 
 }

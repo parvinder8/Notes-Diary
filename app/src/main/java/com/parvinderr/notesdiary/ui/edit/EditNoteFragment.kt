@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.parvinderr.notesdiary.R
 import com.parvinderr.notesdiary.common.ViewBindingFragment
 import com.parvinderr.notesdiary.databinding.FragmentEditNoteBinding
@@ -14,11 +15,14 @@ import com.parvinderr.notesdiary.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class EditNoteFragment @Inject constructor(): ViewBindingFragment<FragmentEditNoteBinding>() {
+class EditNoteFragment @Inject constructor() : ViewBindingFragment<FragmentEditNoteBinding>() {
 
     private val viewModel by viewModels<EditViewModel>()
 
@@ -31,10 +35,17 @@ class EditNoteFragment @Inject constructor(): ViewBindingFragment<FragmentEditNo
     }
 
     override fun init() {
+        setViews()
         observers()
         clickListeners()
         listeners()
     }
+
+    private fun setViews() {
+        binding.tvDateTimeHolder.text =
+            SimpleDateFormat("EEEE, MMM/dd, HH:mm a", Locale.ENGLISH).format(Date())
+    }
+
 
     private fun listeners() {
         with(binding) {
@@ -56,7 +67,7 @@ class EditNoteFragment @Inject constructor(): ViewBindingFragment<FragmentEditNo
         with(binding) {
             tvBack.setOnClickListener {
                 if (checkNoteContent()) {
-                    childFragmentManager.popBackStack()
+                    navigateToHome()
                 } else {
                     setAndShowWarningDialog("Do you want to proceed?")
                 }
@@ -64,7 +75,7 @@ class EditNoteFragment @Inject constructor(): ViewBindingFragment<FragmentEditNo
 
             tvSave.setOnClickListener {
                 if (checkNoteContent()) {
-                    showToast(getString(R.string.saving_note_failed))
+                    showToast(getString(R.string.title_and_content_empty))
                 } else {
                     saveNoteContent()
                 }
@@ -85,7 +96,7 @@ class EditNoteFragment @Inject constructor(): ViewBindingFragment<FragmentEditNo
             }
             setNegativeButton(getString(R.string.exit)) { d, _ ->
                 d.dismiss()
-                childFragmentManager.popBackStack()
+                navigateToHome()
             }
             show()
         }
@@ -95,11 +106,16 @@ class EditNoteFragment @Inject constructor(): ViewBindingFragment<FragmentEditNo
         with(viewModel) {
             lifecycleScope.launch {
                 noteResponse.collectLatest {
+                    if (it.isEmpty()) return@collectLatest
                     showToast(it)
-                    parentFragmentManager.popBackStack()
+                    navigateToHome()
                 }
             }
         }
+    }
+
+    private fun navigateToHome() {
+        findNavController().navigate(EditNoteFragmentDirections.actionEditNoteFragmentToHomeFragment())
     }
 
 
