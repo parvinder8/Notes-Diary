@@ -8,9 +8,9 @@
 
     <TextView
         android:id="@+id/tv_app_name"
+        style="@style/AppHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/AppHeading"
         android:layout_marginTop="@dimen/dimen12"
         android:text="@string/app_name"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,6 +28,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_app_name" />
 
+
+    <TextView
+        android:id="@+id/tv_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/dimen4"
+        android:minWidth="48dp"
+        android:paddingHorizontal="@dimen/dimen12"
+        app:drawableStartCompat="@drawable/ic_filter_black"
+        app:layout_constraintBottom_toBottomOf="@+id/et_search"
+        app:layout_constraintEnd_toEndOf="@id/et_search"
+        app:layout_constraintTop_toTopOf="@+id/et_search" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_notes"

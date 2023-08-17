@@ -37,12 +37,17 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         if (isLongPressed) {
             showPopUpMenu(item, itemView)
         } else {
-            /**
-             * move to edit note screen
-             */
-            showToast("Clicked")
-
+            navigateToEditNote(item.id)
         }
+    }
+
+    private fun navigateToEditNote(id: Long) {
+        findNavController().navigate(
+            HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(
+                id,
+                true
+            )
+        )
     }
 
     private fun showPopUpMenu(item: Note, itemView: View) {
@@ -50,7 +55,11 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         menu.inflate(R.menu.note_item_menu)
         menu.setOnMenuItemClickListener {
             when (it.title.toString().lowercase().trim()) {
-                "edit" -> true
+                "edit" -> {
+                    navigateToEditNote(item.id)
+                    true
+                }
+
                 "delete" -> {
                     lifecycleScope.launch {
                         homeViewModel.deleteNote(item).collectLatest { response ->
@@ -109,8 +118,11 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         with(binding) {
             fbAdd.setOnClickListener {
                 val navDirection =
-                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment("", true)
+                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(-1L, false)
                 findNavController().navigate(navDirection)
+            }
+            tvFilter.setOnClickListener {
+                showFilterBottomSheet()
             }
         }
     }
@@ -153,7 +165,6 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
     }
 
     private fun showFilterBottomSheet() {
-// TODO: Create bottom sheet
         bottomSheet.show()
     }
 

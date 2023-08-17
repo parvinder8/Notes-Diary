@@ -56,7 +56,7 @@ class NoteRepositoryImpl @Inject constructor(
             notesDao.update(note)
             return context.getString(R.string.note_updated_successfully)
         } catch (e: Exception) {
-            throw Exception(context.getString(R.string.updating_note_failed))
+            throw Exception(e.message ?: context.getString(R.string.updating_note_failed))
         }
     }
 

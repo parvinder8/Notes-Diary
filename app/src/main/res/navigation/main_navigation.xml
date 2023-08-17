@@ -25,9 +25,10 @@
             app:destination="@id/editNoteFragment">
             <argument
                 android:name="noteId"
-                app:argType="string" />
+                app:argType="long" />
             <argument
-                android:name="isNewNote"
+                android:name="isEditNote"
+                android:defaultValue="false"
                 app:argType="boolean" />
         </action>
         <action

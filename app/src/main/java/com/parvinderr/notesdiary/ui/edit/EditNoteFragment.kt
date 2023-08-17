@@ -12,6 +12,7 @@ import com.parvinderr.notesdiary.common.ViewBindingFragment
 import com.parvinderr.notesdiary.databinding.FragmentEditNoteBinding
 import com.parvinderr.notesdiary.ui.edit.viewmodel.EditViewModel
 import com.parvinderr.notesdiary.utils.showToast
+import com.parvinderr.notesdiary.utils.toEditable
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -42,6 +43,14 @@ class EditNoteFragment @Inject constructor() : ViewBindingFragment<FragmentEditN
     }
 
     private fun setViews() {
+        val isEditNote = arguments?.getBoolean("isEditNote") ?: false
+        val tempNoteId = arguments?.getLong("noteId") ?: 0L
+        viewModel.apply {
+            setIsUpdateNote(isEditNote)
+            if (isEditNote) {
+                getNoteById(tempNoteId)
+            }
+        }
         binding.tvDateTimeHolder.text =
             SimpleDateFormat("EEEE, MMM/dd, HH:mm a", Locale.ENGLISH).format(Date())
     }
@@ -111,6 +120,15 @@ class EditNoteFragment @Inject constructor() : ViewBindingFragment<FragmentEditN
                     navigateToHome()
                 }
             }
+
+            lifecycleScope.launch {
+                noteItemIfUpdate.collectLatest {
+                    if (it == null) return@collectLatest
+                    binding.etNoteTitle.text = it.noteTitle.toEditable
+                    binding.etNoteContent.text = it.noteContent.toEditable
+                }
+            }
+
         }
     }
 

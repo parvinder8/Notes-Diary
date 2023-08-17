@@ -10,6 +10,7 @@ import com.parvinderr.notesdiary.common.ViewBindingFragment
 import com.parvinderr.notesdiary.databinding.FragmentSettingBinding
 import com.parvinderr.notesdiary.preference.SettingPreferenceHelper
 import com.parvinderr.notesdiary.ui.MainActivity
+import com.parvinderr.notesdiary.utils.FontFamilyEnum
 import com.parvinderr.notesdiary.utils.LayoutEnum
 import com.parvinderr.notesdiary.utils.ThemeEnum
 import com.parvinderr.notesdiary.utils.showToast
@@ -51,6 +52,18 @@ class SettingFragment : ViewBindingFragment<FragmentSettingBinding>() {
                     val tempSelectedData = parent?.selectedItem as ThemeEnum? ?: return
                     (activity as MainActivity).setAppTheme(tempSelectedData)
                     SettingPreferenceHelper.preference.setThemePreference(tempSelectedData)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
+            spinnerFontFamily.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
+                    val tempSelectedData = parent?.selectedItem as FontFamilyEnum? ?: return
+                    (activity as MainActivity).changeFontFamily(tempSelectedData)
+                    SettingPreferenceHelper.preference.setFontFamilyPreference(tempSelectedData)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
