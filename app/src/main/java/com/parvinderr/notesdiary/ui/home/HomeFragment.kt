@@ -1,6 +1,5 @@
 package com.parvinderr.notesdiary.ui.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +28,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
@@ -143,7 +143,7 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
 
         lifecycleScope.launch {
             homeViewModel.searchQuery.collectLatest {
-                Log.d("search_query", it)
+                Timber.tag("search_query").d(it)
                 job?.cancel()
                 job = lifecycleScope.launch {
                     delay(Constants.SearchConstants.SEARCH_DEBOUNCING_TIME)
