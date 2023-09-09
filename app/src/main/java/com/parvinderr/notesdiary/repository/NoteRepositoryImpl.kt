@@ -7,6 +7,7 @@ import com.parvinderr.notesdiary.data.dao.NoteDao
 import com.parvinderr.notesdiary.data.model.Note
 import com.parvinderr.notesdiary.utils.NotesFilterBy
 import com.parvinderr.notesdiary.utils.NotesSortBy
+import timber.log.Timber
 import javax.inject.Inject
 
 class NoteRepositoryImpl @Inject constructor(
@@ -24,7 +25,13 @@ class NoteRepositoryImpl @Inject constructor(
         searchQuery: String, filter: NotesFilterBy, listType: NotesSortBy
     ): List<Note> {
         try {
-            return notesDao.filterNotes(searchQuery, filter.name, listType.name)
+            Timber.tag("in_filter_q")
+                .d("$searchQuery --> ${filter.getFilterTypeValue()} --> ${listType.getSortTypeValue()}")
+            return notesDao.filterNotes(
+                searchQuery,
+                filter.getFilterTypeValue(),
+                listType.getSortTypeValue()
+            )
         } catch (e: Exception) {
             throw Exception(e.message ?: context.getString(R.string.something_went_wrong))
         }

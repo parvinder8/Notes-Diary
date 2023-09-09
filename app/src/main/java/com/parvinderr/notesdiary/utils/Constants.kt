@@ -14,6 +14,8 @@ class Constants {
             const val APP_THEME = "app_theme"
             const val APP_LAYOUT = "app_layout"
             const val FONT_FAMILY = "font_family"
+            const val FILTER_TYPE = "filter_type"
+            const val SORT_BY = "sort_by"
         }
     }
 

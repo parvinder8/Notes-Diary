@@ -44,7 +44,10 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
     }
 
     private val filterAdapter = FilterAdapter { filterBy, sortBy ->
-
+        Timber.tag("selected_filter").d("$filterBy --> $sortBy")
+        homeViewModel.apply {
+            setSortAndFilterType(sortBy, filterBy)
+        }
     }
 
     private fun navigateToEditNote(id: Long) {
@@ -142,6 +145,13 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         }
 
         lifecycleScope.launch {
+            homeViewModel.sortType.collectLatest {
+                getNotesData(homeViewModel.searchQuery.value ?: "")
+            }
+        }
+
+
+        lifecycleScope.launch {
             homeViewModel.searchQuery.collectLatest {
                 Timber.tag("search_query").d(it)
                 job?.cancel()
@@ -172,6 +182,7 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
     private fun showFilterBottomSheet() {
         val bottomSheetBinding = BottomSheetLayoutBinding.inflate(layoutInflater)
         bottomSheetBinding.recyclerView.adapter = filterAdapter
+        bottomSheet.setContentView(bottomSheetBinding.root)
         bottomSheet.show()
     }
 

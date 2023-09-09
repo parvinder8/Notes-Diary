@@ -25,4 +25,5 @@
     <dimen name="item_padding">6dp</dimen>
     <dimen name="dimen24">24dp</dimen>
     <dimen name="dimen50">50dp</dimen>
+    <dimen name="dimen14">14dp</dimen>
 </resources>

@@ -1,9 +1,9 @@
 package com.parvinderr.notesdiary.ui.home.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.parvinderr.notesdiary.data.model.Note
+import com.parvinderr.notesdiary.preference.SettingPreferenceHelper
 import com.parvinderr.notesdiary.repository.NoteRepository
 import com.parvinderr.notesdiary.utils.NotesFilterBy
 import com.parvinderr.notesdiary.utils.NotesSortBy
@@ -37,13 +37,25 @@ class HomeViewModel @Inject constructor(
     val sortType get() = _sortType as StateFlow<NotesSortBy>
 
     init {
-        getNotesData()
+        viewModelScope.launch {
+            _filterType.emit(SettingPreferenceHelper.preference.getFilterType())
+            _sortType.emit(SettingPreferenceHelper.preference.getSortBy())
+        }
+        getNotesData(filterType = filterType.value, sortBy = sortType.value)
+    }
+
+    fun setSortAndFilterType(sort: NotesSortBy, filterType: NotesFilterBy) {
+        viewModelScope.launch {
+            SettingPreferenceHelper.preference.setSortBy(sort)
+            SettingPreferenceHelper.preference.setFilterType(filterType)
+            _filterType.emit(filterType)
+            _sortType.emit(sort)
+        }
     }
 
 
     private fun getAll(): Flow<List<Note>> = flow {
         val tempAllNotes = notesRepository.getAllNotes()
-        Log.d("in_get_all", tempAllNotes.toString())
         emit(tempAllNotes)
     }.stateIn(
         scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = ArrayList()
@@ -52,11 +64,8 @@ class HomeViewModel @Inject constructor(
     private fun filterNotes(
         searchQuery: String, filterType: NotesFilterBy, sortBy: NotesSortBy
     ): Flow<List<Note>> {
-
         return flow {
             val tempAllNotes = notesRepository.filterNotes(searchQuery, filterType, sortBy)
-            Log.d("in_filter", tempAllNotes.toString())
-
             emit(tempAllNotes)
         }.stateIn(
             scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = ArrayList()

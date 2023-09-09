@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                 FontFamilyEnum.POPPINS -> R.style.Poppins
                 FontFamilyEnum.SANS -> R.style.SansSerif
                 FontFamilyEnum.ROBOTO -> R.style.Roboto
-            }, false
+            }, true
         )
     }
 
