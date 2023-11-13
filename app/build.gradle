@@ -90,6 +90,9 @@ dependencies {
     // timber for logging
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
+    // lottie animation
+    implementation 'com.airbnb.android:lottie:6.1.0'
+
     // Kotlin Coroutines
     def coroutines_version = "1.6.4"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutines_version}"

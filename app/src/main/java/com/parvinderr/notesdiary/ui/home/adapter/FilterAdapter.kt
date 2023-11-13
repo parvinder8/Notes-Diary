@@ -18,8 +18,10 @@ class FilterAdapter(private val onClick: (NotesFilterBy, NotesSortBy) -> Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterViewHolder {
         return FilterViewHolder(
             ItemLayoutFilterBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
+            ),
         )
     }
 
@@ -37,11 +39,9 @@ class FilterAdapter(private val onClick: (NotesFilterBy, NotesSortBy) -> Unit) :
 
     override fun onBindViewHolder(holder: FilterViewHolder, position: Int) {
         val item = filterList[position]
-        Timber.tag("filter_type").d(item.toString())
         holder.setViews(item, selectedFilter, selectedSortBy)
         holder.itemView.setOnClickListener {
             setSelectedFilter(item, position)
-
         }
     }
 
@@ -54,9 +54,7 @@ class FilterAdapter(private val onClick: (NotesFilterBy, NotesSortBy) -> Unit) :
         }
         selectedFilter = item
         selectedSortBy = filterType
-        onClick(
-            item, filterType
-        )
+        onClick.invoke(item, filterType)
         if (shouldDoPositionUpdate) notifyItemChanged(position) else notifyDataSetChanged()
     }
 }

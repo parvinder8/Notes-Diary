@@ -36,7 +36,10 @@ class SettingFragment : ViewBindingFragment<FragmentSettingBinding>() {
 
             spinnerLayoutType.onItemSelectedListener = object : OnItemSelectedListener {
                 override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
                 ) {
                     val tempSelectedData = parent?.selectedItem as LayoutEnum? ?: return
                     SettingPreferenceHelper.preference.setLayoutPreference(tempSelectedData)
@@ -47,7 +50,10 @@ class SettingFragment : ViewBindingFragment<FragmentSettingBinding>() {
 
             spinnerAppTheme.onItemSelectedListener = object : OnItemSelectedListener {
                 override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
                 ) {
                     val tempSelectedData = parent?.selectedItem as ThemeEnum? ?: return
                     (activity as MainActivity).setAppTheme(tempSelectedData)
@@ -59,7 +65,10 @@ class SettingFragment : ViewBindingFragment<FragmentSettingBinding>() {
 
             spinnerFontFamily.onItemSelectedListener = object : OnItemSelectedListener {
                 override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
                 ) {
                     val tempSelectedData = parent?.selectedItem as FontFamilyEnum? ?: return
                     (activity as MainActivity).changeFontFamily(tempSelectedData)
@@ -76,17 +85,20 @@ class SettingFragment : ViewBindingFragment<FragmentSettingBinding>() {
         val selectedTheme = SettingPreferenceHelper.preference.getThemePreference()
 
         val themeAdapter = ArrayAdapter(
-            requireContext(), android.R.layout.simple_spinner_dropdown_item, themeData
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            themeData,
         )
         binding.spinnerAppTheme.adapter = themeAdapter
         binding.spinnerAppTheme.setSelection(themeData.indexOf(selectedTheme))
-
 
         val layoutData = LayoutEnum.values()
         val selectedLayout = SettingPreferenceHelper.preference.getLayoutPreference()
 
         val layoutAdapter = ArrayAdapter(
-            requireContext(), android.R.layout.simple_spinner_dropdown_item, layoutData
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            layoutData,
         )
         binding.spinnerLayoutType.adapter = layoutAdapter
         binding.spinnerLayoutType.setSelection(layoutData.indexOf(selectedLayout))
@@ -95,11 +107,11 @@ class SettingFragment : ViewBindingFragment<FragmentSettingBinding>() {
         val selectedFontFamily = SettingPreferenceHelper.preference.getFontFamilyPreference()
 
         val fontFamilyAdapter = ArrayAdapter(
-            requireContext(), android.R.layout.simple_spinner_dropdown_item, fontFamilyData
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            fontFamilyData,
         )
         binding.spinnerFontFamily.adapter = fontFamilyAdapter
         binding.spinnerFontFamily.setSelection(fontFamilyData.indexOf(selectedFontFamily))
-
     }
-
 }

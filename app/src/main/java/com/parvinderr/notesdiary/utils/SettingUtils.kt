@@ -1,6 +1,5 @@
 package com.parvinderr.notesdiary.utils
 
-
 enum class ThemeEnum {
     DARK, LIGHT, DEFAULT
 }
@@ -8,7 +7,6 @@ enum class ThemeEnum {
 enum class FontFamilyEnum {
     SANS, POPPINS, ROBOTO, DONGLE
 }
-
 
 enum class LayoutEnum {
     LIST, GRID

@@ -15,21 +15,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.parvinderr.notesdiary.ui.MainActivity
 
-
 fun Context.showToast(text: String, type: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, text, type).show()
 }
-
 
 fun Context.closeApp() {
     (this as? MainActivity)?.finish()
 }
 
-
 fun Context.backPressed() {
     (this as? MainActivity)?.onBackPressedDispatcher?.onBackPressed()
 }
-
 
 fun Fragment.showToast(text: String, type: Int = Toast.LENGTH_SHORT) {
     requireContext().showToast(text, type)
@@ -42,11 +38,14 @@ fun View.showSnackBar(text: String, type: Int = Toast.LENGTH_SHORT) {
 
 fun View.showKeyboard(delay: Long = 200L) {
     val context = this.context ?: return
-    this.postDelayed(focusNotFound@{
-        val focus = this.findFocus() ?: return@focusNotFound
-        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(focus, 0)
-    }, delay)
+    this.postDelayed(
+        focusNotFound@{
+            val focus = this.findFocus() ?: return@focusNotFound
+            val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(focus, 0)
+        },
+        delay,
+    )
 }
 
 fun View.hideKeyboard() {
@@ -65,6 +64,14 @@ fun View.visible() {
 
 fun View.hide() {
     this.visibility = View.INVISIBLE
+}
+
+fun View.show(b: Boolean, gone: Boolean = true) {
+    if (b) {
+        visible()
+    } else {
+        if (gone) gone() else hide()
+    }
 }
 
 fun View.isVisible(): Boolean {
@@ -87,9 +94,12 @@ fun View.showWithFade(duration: Long = 300) {
 }
 
 fun RecyclerView.scrollToPositionBackgroundThread(position: Int, timeInMillis: Long = 200) {
-    Handler(Looper.getMainLooper()).postDelayed(kotlinx.coroutines.Runnable {
-        this.scrollToPosition(position)
-    }, timeInMillis)
+    Handler(Looper.getMainLooper()).postDelayed(
+        kotlinx.coroutines.Runnable {
+            this.scrollToPosition(position)
+        },
+        timeInMillis,
+    )
 }
 
 val String.toEditable: Editable get() = Editable.Factory.getInstance().newEditable(this)

@@ -11,7 +11,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class NoteRepositoryImpl @Inject constructor(
-    private val context: Context, private val notesDao: NoteDao
+    private val context: Context,
+    private val notesDao: NoteDao,
 ) : NoteRepository {
     override suspend fun getAllNotes(): List<Note> {
         try {
@@ -22,15 +23,17 @@ class NoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun filterNotes(
-        searchQuery: String, filter: NotesFilterBy, listType: NotesSortBy
+        searchQuery: String,
+        filter: NotesFilterBy,
+        sortType: NotesSortBy,
     ): List<Note> {
         try {
             Timber.tag("in_filter_q")
-                .d("$searchQuery --> ${filter.getFilterTypeValue()} --> ${listType.getSortTypeValue()}")
+                .d("$searchQuery --> ${filter.getFilterTypeValue()} --> ${sortType.getSortTypeValue()}")
             return notesDao.filterNotes(
                 searchQuery,
                 filter.getFilterTypeValue(),
-                listType.getSortTypeValue()
+                sortType.getSortTypeValue(),
             )
         } catch (e: Exception) {
             throw Exception(e.message ?: context.getString(R.string.something_went_wrong))
@@ -73,7 +76,6 @@ class NoteRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             throw Exception(e.message ?: context.getString(R.string.something_went_wrong))
         }
-
     }
 
     override suspend fun deleteNote(note: Note): String {
@@ -84,5 +86,4 @@ class NoteRepositoryImpl @Inject constructor(
             throw Exception(e.message ?: context.getString(R.string.deleting_note_failed))
         }
     }
-
 }

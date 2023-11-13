@@ -11,7 +11,7 @@ interface NoteRepository {
     suspend fun filterNotes(
         searchQuery: String,
         filter: NotesFilterBy,
-        listType: NotesSortBy
+        listType: NotesSortBy,
     ): List<Note>
 
     suspend fun searchNotes(q: String): List<Note>

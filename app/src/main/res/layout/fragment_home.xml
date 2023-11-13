@@ -53,7 +53,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_search"
         tools:itemCount="6"
-        tools:listitem="@layout/item_layout_note" />
+        tools:listitem="@layout/item_layout_note"
+        tools:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/view_empty_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/dimen6"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_search"
+        app:lottie_rawRes="@raw/empty_list" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

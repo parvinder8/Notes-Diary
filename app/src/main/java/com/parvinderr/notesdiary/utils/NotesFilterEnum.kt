@@ -2,7 +2,7 @@ package com.parvinderr.notesdiary.utils
 
 enum class NotesFilterBy(private val filterType: String) {
     TITLE("title"), CONTENT("content"), ADDED_DATE("added_date"), UPDATED_DATE("updated_date"), NONE(
-        "id"
+        "id",
     );
 
     fun getFilterTypeValue(): String {

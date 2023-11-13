@@ -21,7 +21,6 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class EditNoteFragment @Inject constructor() : ViewBindingFragment<FragmentEditNoteBinding>() {
 
@@ -54,7 +53,6 @@ class EditNoteFragment @Inject constructor() : ViewBindingFragment<FragmentEditN
         binding.tvDateTimeHolder.text =
             SimpleDateFormat("EEEE, MMM/dd, HH:mm a", Locale.ENGLISH).format(Date())
     }
-
 
     private fun listeners() {
         with(binding) {
@@ -128,14 +126,12 @@ class EditNoteFragment @Inject constructor() : ViewBindingFragment<FragmentEditN
                     binding.etNoteContent.text = it.noteContent.toEditable
                 }
             }
-
         }
     }
 
     private fun navigateToHome() {
         findNavController().navigate(EditNoteFragmentDirections.actionEditNoteFragmentToHomeFragment())
     }
-
 
     private fun checkNoteContent(): Boolean {
         val noteTitle = binding.etNoteTitle.text ?: ""

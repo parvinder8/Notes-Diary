@@ -84,15 +84,14 @@ class EditViewModel @Inject constructor(
         val isUpdateNote = isUpdateNote.value
         val updateNoteItem = noteItemIfUpdate.value
         if (isUpdateNote && updateNoteItem == null) return
-        backgroundThread.launch() {
+        backgroundThread.launch {
             saveNoteImpl(isUpdateNote).collectLatest {
                 _noteResponse.emit(
-                    it
+                    it,
                 )
             }
         }
     }
-
 
     private fun saveNoteImpl(isUpdateNote: Boolean = false): Flow<String> {
         val tempUpdatedNoteItem = noteItemIfUpdate.value
@@ -112,8 +111,12 @@ class EditViewModel @Inject constructor(
             updatedTime = currentTime,
             isPinned = if (isUpdateNote) tempUpdatedNoteItem?.isPinned ?: false else false,
             isLocked = if (isUpdateNote) tempUpdatedNoteItem?.isLocked ?: false else false,
-            backgroundColor = if (isUpdateNote) tempUpdatedNoteItem?.backgroundColor
-                ?: "" else "FFF"
+            backgroundColor = if (isUpdateNote) {
+                tempUpdatedNoteItem?.backgroundColor
+                    ?: ""
+            } else {
+                "FFF"
+            },
         )
 
         return if (isUpdateNote) {
@@ -121,7 +124,6 @@ class EditViewModel @Inject constructor(
         } else {
             saveNoteImpl(tempNote)
         }
-
     }
 
     private fun saveNoteImpl(note: Note): Flow<String> {
@@ -131,7 +133,6 @@ class EditViewModel @Inject constructor(
             } catch (e: Exception) {
                 emit(e.message ?: context.getString(R.string.saving_note_failed))
             }
-
         }
     }
 
@@ -144,6 +145,4 @@ class EditViewModel @Inject constructor(
             }
         }
     }
-
-
 }

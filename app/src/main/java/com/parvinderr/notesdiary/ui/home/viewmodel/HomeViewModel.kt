@@ -8,19 +8,22 @@ import com.parvinderr.notesdiary.repository.NoteRepository
 import com.parvinderr.notesdiary.utils.NotesFilterBy
 import com.parvinderr.notesdiary.utils.NotesSortBy
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val notesRepository: NoteRepository
+    private val notesRepository: NoteRepository,
 ) : ViewModel() {
 
     private val _allNotes = MutableStateFlow<List<Note>>(ArrayList())
@@ -53,50 +56,48 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
     private fun getAll(): Flow<List<Note>> = flow {
         val tempAllNotes = notesRepository.getAllNotes()
         emit(tempAllNotes)
-    }.stateIn(
-        scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = ArrayList()
-    )
+    }.flowOn(Dispatchers.IO)
 
     private fun filterNotes(
-        searchQuery: String, filterType: NotesFilterBy, sortBy: NotesSortBy
+        searchQuery: String,
+        filterType: NotesFilterBy,
+        sortBy: NotesSortBy,
     ): Flow<List<Note>> {
         return flow {
             val tempAllNotes = notesRepository.filterNotes(searchQuery, filterType, sortBy)
             emit(tempAllNotes)
-        }.stateIn(
-            scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = ArrayList()
-        )
+        }.flowOn(Dispatchers.IO)
     }
-
 
     fun getNotesData(
         getAllData: Boolean = true,
         searchQuery: String = "",
         filterType: NotesFilterBy = NotesFilterBy.NONE,
-        sortBy: NotesSortBy = NotesSortBy.ASCENDING
+        sortBy: NotesSortBy = NotesSortBy.ASCENDING,
     ) {
         viewModelScope.launch {
             _allNotes.emitAll(
-                if (getAllData) getAll() else filterNotes(
-                    searchQuery, filterType, sortBy
-                )
+                if (getAllData) {
+                    getAll()
+                } else {
+                    filterNotes(
+                        searchQuery,
+                        filterType,
+                        sortBy,
+                    )
+                },
             )
         }
     }
-
 
     fun setSearchQuery(q: String) {
         viewModelScope.launch { _searchQuery.emit(q) }
     }
 
-
     fun deleteNote(note: Note): Flow<String> {
         return flow { emit(notesRepository.deleteNote(note)) }
-
     }
-
 }

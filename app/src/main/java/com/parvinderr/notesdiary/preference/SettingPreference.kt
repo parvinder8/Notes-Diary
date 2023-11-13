@@ -17,7 +17,6 @@ import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-
 @Module
 @InstallIn(ActivityComponent::class)
 class SettingPreference @Inject constructor(@ApplicationContext private val context: Context) {
@@ -31,7 +30,7 @@ class SettingPreference @Inject constructor(@ApplicationContext private val cont
     fun getThemePreference(): ThemeEnum {
         if (!sp.contains(APP_THEME)) return ThemeEnum.DEFAULT
         return ThemeEnum.valueOf(
-            sp.getString(APP_THEME, ThemeEnum.DEFAULT.name) ?: ThemeEnum.DEFAULT.name
+            sp.getString(APP_THEME, ThemeEnum.DEFAULT.name) ?: ThemeEnum.DEFAULT.name,
         )
     }
 
@@ -50,7 +49,7 @@ class SettingPreference @Inject constructor(@ApplicationContext private val cont
     fun getLayoutPreference(): LayoutEnum {
         if (!sp.contains(APP_LAYOUT)) return LayoutEnum.LIST
         return LayoutEnum.valueOf(
-            sp.getString(APP_LAYOUT, LayoutEnum.LIST.name) ?: LayoutEnum.LIST.name
+            sp.getString(APP_LAYOUT, LayoutEnum.LIST.name) ?: LayoutEnum.LIST.name,
         )
     }
 
@@ -61,22 +60,21 @@ class SettingPreference @Inject constructor(@ApplicationContext private val cont
     fun getFontFamilyPreference(): FontFamilyEnum {
         if (!sp.contains(FONT_FAMILY)) return FontFamilyEnum.SANS
         return FontFamilyEnum.valueOf(
-            sp.getString(FONT_FAMILY, FontFamilyEnum.SANS.name) ?: FontFamilyEnum.SANS.name
+            sp.getString(FONT_FAMILY, FontFamilyEnum.SANS.name) ?: FontFamilyEnum.SANS.name,
         )
     }
 
     fun getFilterType(): NotesFilterBy {
         if (!sp.contains(FILTER_TYPE)) return NotesFilterBy.NONE
         return NotesFilterBy.valueOf(
-            sp.getString(FILTER_TYPE, NotesFilterBy.NONE.name) ?: NotesFilterBy.NONE.name
+            sp.getString(FILTER_TYPE, NotesFilterBy.NONE.name) ?: NotesFilterBy.NONE.name,
         )
     }
 
     fun getSortBy(): NotesSortBy {
-        if (!sp.contains(FILTER_TYPE)) return NotesSortBy.ASCENDING
+        if (!sp.contains(SORT_BY)) return NotesSortBy.ASCENDING
         return NotesSortBy.valueOf(
-            sp.getString(FILTER_TYPE, NotesSortBy.ASCENDING.name) ?: NotesSortBy.ASCENDING.name
+            sp.getString(SORT_BY, NotesSortBy.ASCENDING.name) ?: NotesSortBy.ASCENDING.name,
         )
     }
-
 }

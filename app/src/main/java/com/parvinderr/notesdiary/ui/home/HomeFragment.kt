@@ -22,6 +22,7 @@ import com.parvinderr.notesdiary.ui.home.adapter.NotesAdapter
 import com.parvinderr.notesdiary.ui.home.viewmodel.HomeViewModel
 import com.parvinderr.notesdiary.utils.Constants
 import com.parvinderr.notesdiary.utils.LayoutEnum
+import com.parvinderr.notesdiary.utils.show
 import com.parvinderr.notesdiary.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -53,8 +54,9 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
     private fun navigateToEditNote(id: Long) {
         findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(
-                id, true
-            )
+                id,
+                true,
+            ),
         )
     }
 
@@ -91,11 +93,15 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         BottomSheetDialog(requireContext())
     }
 
-
     override fun init() {
+        setRecyclerView()
         clickListeners()
         observers()
         listeners()
+    }
+
+    private fun setRecyclerView() {
+        binding.rvNotes.adapter = notesAdapter
     }
 
     override fun onResume() {
@@ -105,9 +111,16 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
 
     private fun setLayoutManager() {
         val layoutManager = SettingPreferenceHelper.preference.getLayoutPreference()
-        val tempLayoutManager = if (layoutManager == LayoutEnum.GRID) GridLayoutManager(
-            requireContext(), 2, GridLayoutManager.VERTICAL, false
-        ) else LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val tempLayoutManager = if (layoutManager == LayoutEnum.GRID) {
+            GridLayoutManager(
+                requireContext(),
+                2,
+                GridLayoutManager.VERTICAL,
+                false,
+            )
+        } else {
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }
         binding.rvNotes.layoutManager = tempLayoutManager
         binding.rvNotes.scrollToPosition(tempLayoutManager.findFirstCompletelyVisibleItemPosition())
     }
@@ -138,18 +151,16 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
     private fun observers() {
         lifecycleScope.launch {
             homeViewModel.allNotes.collectLatest {
-                binding.rvNotes.adapter = notesAdapter
+                binding.viewEmptyList.show(it.isEmpty())
                 notesAdapter.setData(it)
-
             }
         }
 
         lifecycleScope.launch {
             homeViewModel.sortType.collectLatest {
-                getNotesData(homeViewModel.searchQuery.value ?: "")
+                getNotesData(homeViewModel.searchQuery.value)
             }
         }
-
 
         lifecycleScope.launch {
             homeViewModel.searchQuery.collectLatest {
@@ -161,16 +172,14 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
                 }
             }
         }
-
-
     }
 
     override fun onBind(
-        inflater: LayoutInflater, container: ViewGroup?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
     ): FragmentHomeBinding {
         return FragmentHomeBinding.inflate(layoutInflater, container, false)
     }
-
 
     private fun getNotesData(q: String = "") {
         val query = q.ifEmpty { homeViewModel.searchQuery.value }
@@ -185,5 +194,4 @@ class HomeFragment : ViewBindingFragment<FragmentHomeBinding>() {
         bottomSheet.setContentView(bottomSheetBinding.root)
         bottomSheet.show()
     }
-
 }

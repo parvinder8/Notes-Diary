@@ -11,7 +11,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
@@ -19,7 +18,8 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideNoteRepository(
-        @ApplicationContext context: Context, noteDao: NoteDao
+        @ApplicationContext context: Context,
+        noteDao: NoteDao,
     ): NoteRepository {
         return NoteRepositoryImpl(context, noteDao)
     }

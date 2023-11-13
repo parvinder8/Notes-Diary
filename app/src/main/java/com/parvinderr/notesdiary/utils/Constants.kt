@@ -24,5 +24,4 @@ class Constants {
             const val SEARCH_DEBOUNCING_TIME = 600L
         }
     }
-
 }

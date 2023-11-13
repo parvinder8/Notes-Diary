@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
     }
 
     fun changeFontFamily(family: FontFamilyEnum) {
@@ -34,7 +33,8 @@ class MainActivity : AppCompatActivity() {
                 FontFamilyEnum.POPPINS -> R.style.Poppins
                 FontFamilyEnum.SANS -> R.style.SansSerif
                 FontFamilyEnum.ROBOTO -> R.style.Roboto
-            }, true
+            },
+            true,
         )
     }
 
@@ -52,9 +52,11 @@ class MainActivity : AppCompatActivity() {
     private fun listener() {
         val navHostFragment = findNavController(R.id.nav_host_fragment)
         navHostFragment.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.editNoteFragment || destination.id == R.id.splashFragment) binding.bottomNavigationView.gone()
-            else binding.bottomNavigationView.visible()
-
+            if (destination.id == R.id.editNoteFragment || destination.id == R.id.splashFragment) {
+                binding.bottomNavigationView.gone()
+            } else {
+                binding.bottomNavigationView.visible()
+            }
         }
     }
 
@@ -64,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 ThemeEnum.DEFAULT -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                 ThemeEnum.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
                 ThemeEnum.DARK -> AppCompatDelegate.MODE_NIGHT_YES
-            }
+            },
         )
     }
 }

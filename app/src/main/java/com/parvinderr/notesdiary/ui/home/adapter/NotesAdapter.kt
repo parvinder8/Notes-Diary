@@ -20,12 +20,13 @@ class NotesAdapter(private val onClick: (Note, Boolean, View) -> Unit) :
         diffResult.dispatchUpdatesTo(this)
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(
             ItemLayoutNoteBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
+            ),
         )
     }
 
@@ -48,10 +49,9 @@ class NotesAdapter(private val onClick: (Note, Boolean, View) -> Unit) :
         }
     }
 
-
     class NotesDiffUtilCallback(
         private val notes: MutableList<Note>,
-        private val mData: List<Note>
+        private val mData: List<Note>,
     ) :
         DiffUtil.Callback() {
         override fun getOldListSize(): Int {

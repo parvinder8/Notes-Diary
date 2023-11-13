@@ -18,12 +18,10 @@
     <!-- EditView Search -->
     <style name="SearchEditText" parent="Widget.AppCompat.EditText">
         <item name="android:background">@drawable/et_round_white_border</item>
-        <item name="android:padding">@dimen/dimen6</item>
+        <item name="android:padding">@dimen/dimen10</item>
         <item name="android:layout_marginStart">@dimen/start_margin</item>
         <item name="android:layout_marginEnd">@dimen/end_margin</item>
         <item name="android:drawableStart">@drawable/ic_search_white</item>
-        <item name="android:paddingEnd">@dimen/dimen12</item>
-        <item name="android:paddingStart">@dimen/dimen8</item>
         <item name="android:textColor">@color/off_white</item>
         <item name="android:maxLines">1</item>
     </style>
@@ -54,6 +52,7 @@
         <item name="android:layout_marginTop">@dimen/end_margin</item>
         <item name="android:layout_marginBottom">@dimen/end_margin</item>
         <item name="cardCornerRadius">@dimen/dimen12</item>
+        <item name="cardElevation">@dimen/dimen4</item>
         <item name="cardBackgroundColor">@color/off_white</item>
     </style>
 

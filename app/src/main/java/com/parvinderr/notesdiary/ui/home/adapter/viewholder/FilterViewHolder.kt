@@ -12,7 +12,9 @@ class FilterViewHolder(private val binding: ItemLayoutFilterBinding) :
     fun setViews(item: NotesFilterBy, selectedFilter: NotesFilterBy, selectedSortBy: NotesSortBy) {
         if (selectedFilter == item) {
             binding.tvFilterName.setCompoundDrawablesWithIntrinsicBounds(
-                null, null, when (selectedSortBy) {
+                null,
+                null,
+                when (selectedSortBy) {
                     NotesSortBy.DESCENDING -> {
                         ContextCompat.getDrawable(binding.root.context, R.drawable.ic_arrow_down)
                     }
@@ -24,7 +26,8 @@ class FilterViewHolder(private val binding: ItemLayoutFilterBinding) :
                     else -> {
                         null
                     }
-                }, null
+                },
+                null,
             )
         } else {
             binding.tvFilterName.setCompoundDrawables(null, null, null, null)
