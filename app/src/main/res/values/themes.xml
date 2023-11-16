@@ -1,9 +1,10 @@
 <resources>
 
-    <style name="NotesDiary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="App.Theme.NotesDiary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/blue</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryContainer">@color/blue_100</item>
+        <item name="colorPrimaryDark">@color/white</item>
 
         <item name="colorSecondary">@color/light_grey</item>
         <item name="colorOnSecondary">@color/white</item>
@@ -12,6 +13,7 @@
         <item name="colorError">@color/red</item>
         <item name="colorOnError">@color/white</item>
         <item name="colorErrorContainer">@color/light_peach</item>
+
     </style>
 
 

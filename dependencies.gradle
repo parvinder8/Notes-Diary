@@ -1,0 +1,8 @@
+ext.versions = [
+        navigation_version: '2.5.3',
+        kotlin_version    : '1.9.0',
+        hilt_version      : '2.45',
+        lifecycle_version : '2.6.1',
+        room_version      : '2.5.1',
+        coroutines_version: '1.6.4',
+        data_store_version: '1.0.0',]
