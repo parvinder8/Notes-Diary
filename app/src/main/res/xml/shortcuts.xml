@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:shortcutId="home"
+        android:shortcutLongLabel="@string/home"
+        android:shortcutShortLabel="@string/home">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.parvinderr.notesdiary.ui.MainActivity"
+            android:targetPackage="com.parvinderr.notesdiary" />
+
+        <categories android:name="android.shortcut.conversation" />
+        <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
+    </shortcut>
+
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_setting"
+        android:shortcutId="setting"
+        android:shortcutLongLabel="@string/setting"
+        android:shortcutShortLabel="@string/setting">
+        <intent
+            android:action="android.intent.action.SETTING_SCREEN"
+            android:targetClass="com.parvinderr.notesdiary.ui.MainActivity"
+            android:targetPackage="com.parvinderr.notesdiary" />
+
+        <categories android:name="android.shortcut.conversation" />
+        <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_add"
+        android:shortcutId="create_note"
+        android:shortcutLongLabel="@string/create_note"
+        android:shortcutShortLabel="@string/create_note">
+        <intent
+            android:action="android.intent.action.EDIT_NOTE"
+            android:targetClass="com.parvinderr.notesdiary.ui.MainActivity"
+            android:targetPackage="com.parvinderr.notesdiary" />
+
+        <categories android:name="android.shortcut.conversation" />
+        <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
+    </shortcut>
+</shortcuts>

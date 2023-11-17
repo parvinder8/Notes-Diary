@@ -26,6 +26,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    private fun navigationThroughShortCuts() {
+        val navController = findNavController(R.id.nav_host_fragment)
+        val action = intent.action
+        if (action == "android.intent.action.SETTING_SCREEN") {
+            navController.navigate(R.id.settingFragment)
+        } else if (action == "android.intent.action.EDIT_NOTE") {
+            navController.navigate(R.id.editNoteFragment)
+        }
+    }
+
     fun changeFontFamily(family: FontFamilyEnum) {
         theme.applyStyle(
             when (family) {
@@ -41,6 +51,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         setUpViews()
+        navigationThroughShortCuts()
     }
 
     private fun setUpViews() {
